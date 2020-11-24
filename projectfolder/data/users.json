@@ -1,0 +1,27 @@
+ [
+     {  
+          "name": "Sachin",  
+          "city":"Yamunanager", 
+          "state": "HR"
+        },
+    { 
+          "name": "Rahul",  
+          "city":"Bilaspur", 
+          "state": "HP" 
+        }, 
+        {  
+          "name": "Aman",  
+          "city":"Bilaspur", 
+          "state": "HP" 
+        }, 
+        {  
+          "name": "Aman",  
+          "city":"Saharnpur", 
+          "state": "UP" 
+        }, 
+    {  
+          "name": "Akash",  
+          "city":"Saharnpur", 
+          "state": "UP" 
+        }
+ ]

@@ -16,13 +16,26 @@ const userRoutes = (app, fs) => {
   
   app.post('/users', (req, res) => {
     fs.readFile(dataPath, 'utf8', (err, data) => {
-      console.log(req.body.city);
-      
+      var city=req.body.city;
+      var items = JSON.parse(data);
+      var newArr=[];
+for (let index = 0; index < items.length; index++) {
+ 
+  
+  var newCity =items[index];
 
-      if (err) {
-        throw err;
-      }
-     res.send(JSON.parse(data));
+ 
+  if(newCity.city==city){
+        newArr.push(newCity);
+          }
+ 
+}
+
+res.send(newArr);
+
+
+
+ 
     });
   });
 };

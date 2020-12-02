@@ -1,11 +1,10 @@
 const express = require('express');
 const path =require("path");
 const dbConnection = require("./db/con");
-const cookieSession = require('cookie-session');
 const register= require("./models/register")
 
-const { body, validationResult } = require('express-validator');
 const Register = require('./models/register');
+const { PassThrough } = require('stream');
 const app =express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,21 +19,23 @@ app.set("view engine","hbs");
 app.set("views",template_path);
 
 app.get("/",(req,res)=>{
-    res.render("login-register");
+    res.render("login");
 })
 
 app.get("/register",(req,res)=>{
-    res.render("login-register");
+    res.render("register");
 })
-app.get("/",(req,res)=>{
-    res.render("login-register");
+app.get("/login",(req,res)=>{
+    res.render("login");
+})
+app.get("/index",(req,res)=>{
+    res.render("index");
 })
 
-// REGISTER PAGE
+
 app.post('/register',(req,res)=>{
     try{
-    
-                    // INSERTING USER INTO DATABASE
+                   
                    const registeremplloyee= new Register({
                        name: req.body.user_name,
                        email: req.body.user_email,
@@ -42,29 +43,41 @@ app.post('/register',(req,res)=>{
 
                    })
                    const registered =  registeremplloyee.save();
-                   res.status(201).render("login-register");
+                   res.redirect("/");
+                   console.log("successfully registered");
                 }catch(error){
                     res.send(400).send(error);
                 } 
-    });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+            });
 
-
-app.post('/register',(req,res)=>{
+app.post('/',(req,res)=>{
         try{
-        
+            
+            
                 const email = req.body.user_email;
                 const password=req.body.user_pass;
+            
+                const useremail =Register.findOne({email:email}, function (err, docs) {
+                    let pass = docs.password;
 
-                const useremail =Register.findOne({email:email});
-                if(useremail.password===password){
-                    res.status(201).render("./templates/views/index"); 
-                }else{
-                    res.send("password is not match");
-                }
-                    }catch(error){
-                        res.send(400).send(error);
+                    if(pass==password){
+                            res.redirect("index"); 
+                        
+                        }else{
+                            res.send("password is not match");
+                        }
+                   
+                    console.log(pass);
+            
+                })
+
+                 }catch(error){
+                        res.send(error);
                     } 
-        });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+        });   
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
     
 
 app.listen(port, ()=>{

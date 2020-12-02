@@ -16,6 +16,6 @@ const employeeSchema= new mongoose.Schema({
     },
 })
 
-const Register= new mongoose.model("Register",employeeSchema);
+const Register= new mongoose.model("register",employeeSchema);
 
 module.exports = Register

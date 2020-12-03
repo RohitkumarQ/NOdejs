@@ -2,6 +2,7 @@ const express = require('express');
 const path =require("path");
 const dbConnection = require("./db/con");
 const register= require("./models/register")
+const cookie= require("cookie-session");
 
 const Register = require('./models/register');
 const { PassThrough } = require('stream');
@@ -42,7 +43,13 @@ app.post('/register',(req,res)=>{
                        password: req.body.user_pass
 
                    })
-                   const registered =  registeremplloyee.save();
+
+                   const token = registeremplloyee.generateAuthToken();
+
+                //    const registered =  registeremplloyee.save();
+                const coookie=res.cookie("jwt",token);
+                console.log(cookie);
+                  
                    res.redirect("/");
                    console.log("successfully registered");
                 }catch(error){
@@ -60,14 +67,15 @@ app.post('/',(req,res)=>{
                 const useremail =Register.findOne({email:email}, function (err, docs) {
                     let pass = docs.password;
 
+                    const token = docs.generateAuthToken();
+                    console.log(token);
+
                     if(pass==password){
                             res.redirect("index"); 
                         
                         }else{
                             res.send("password is not match");
                         }
-                   
-                    console.log(pass);
             
                 })
 
@@ -77,8 +85,6 @@ app.post('/',(req,res)=>{
         });   
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-    
 
 app.listen(port, ()=>{
 console.log(`server is running at port no ${port}`);

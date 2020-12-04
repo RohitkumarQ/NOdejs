@@ -24,16 +24,19 @@ const employeeSchema= new mongoose.Schema({
 
 employeeSchema.methods.generateAuthToken =async function(){
     try{
-        const token= await jwt.sign({_id:this._id.toHexString()}, "mynameisrohitkumarfromhimachalkangrajwalajilagru");
+        const token= await jwt.sign({_id:this._id}, "mynameisrohitkumarfromhimachalkangrajwalajilagru");
        this.token =token;
      
-        await this.save();
+        const user=await this.save();
+        //console.log(user.token);
 
     } catch(error){
        
-        console.log("the error part" + error);
+        let msg=console.log("the error part" + error);
+        return msg;
 
     }
+
 }
 
 const Register= new mongoose.model("register",employeeSchema);

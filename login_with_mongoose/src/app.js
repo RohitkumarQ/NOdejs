@@ -4,6 +4,7 @@ const dbConnection = require("./db/con");
 const register= require("./models/register")
 const cookie= require("cookie-session");
 
+
 const Register = require('./models/register');
 const { PassThrough } = require('stream');
 const app =express();
@@ -44,14 +45,15 @@ app.post('/register',(req,res)=>{
 
                    })
 
-                   const token = registeremplloyee.generateAuthToken();
+                   const user = registeremplloyee.generateAuthToken();
+                //   console.log(token);
 
-                //    const registered =  registeremplloyee.save();
-                const coookie=res.cookie("jwt",token);
-                console.log(cookie);
-                  
-                   res.redirect("/");
-                   console.log("successfully registered");
+                //  const registered =  registeremplloyee.save();
+                //  const coookie=res.cookie("token",token);
+                //  console.log(registered.token);
+                
+                  res.send(200).redirect("/");
+                //    console.log("successfully registered");
                 }catch(error){
                     res.send(400).send(error);
                 } 
@@ -67,8 +69,8 @@ app.post('/',(req,res)=>{
                 const useremail =Register.findOne({email:email}, function (err, docs) {
                     let pass = docs.password;
 
-                    const token = docs.generateAuthToken();
-                    console.log(token);
+                    // const token = .generateAuthToken();
+                    // console.log(useremail.docs);
 
                     if(pass==password){
                             res.redirect("index"); 

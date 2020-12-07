@@ -1,0 +1,6 @@
+{ _id: 5fce21dda053bb6629c4fef6,
+  name: 'Rishav Sharma',
+  email: 'rishav@gmail.com',
+  password: '1234',
+  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmNlMjFkZGEwNTNiYjY2MjljNGZlZjYiLCJpYXQiOjE2MDczNDQ2MDV9.WP9tRTZt_Tsjtq-pxbWH1GYbzrtu7_g0YHsFFPw-BdI',
+  __v: 0 }

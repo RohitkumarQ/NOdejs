@@ -1,5 +1,8 @@
 const mongoose= require("mongoose");
-const jwt= require("jsonwebtoken")
+const jwt= require("jsonwebtoken");
+var  cookieparser = require("cookie-parser"); 
+
+
 
 const employeeSchema= new mongoose.Schema({
     name:{
@@ -27,14 +30,19 @@ employeeSchema.methods.generateAuthToken =async function(){
         const token= await jwt.sign({_id:this._id}, "mynameisrohitkumarfromhimachalkangrajwalajilagru");
        this.token =token;
      
+    //    if(email==this.email){
+           
+    //    }
+     
         const user=await this.save();
-        //console.log(user.token);
-
+    //     console.log(user);
+    //     localStorage.setItem('users',user);
+    //    console.log(localStorage);
     } catch(error){
-       
-        let msg=console.log("the error part" + error);
-        return msg;
 
+       
+        console.log("the error part" + error);
+      
     }
 
 }

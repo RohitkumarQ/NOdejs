@@ -2,30 +2,38 @@ const express = require('express');
 const path =require("path");
 const dbConnection = require("./db/con");
 const register= require("./models/register")
-const cookie= require("cookie-session");
-
-
+var  cookieparser = require("cookie-parser");
 const Register = require('./models/register');
 const { PassThrough } = require('stream');
+var JSAlert = require("js-alert");
+//  const LocalStorage = require('node-localstorage')
+//  const {localStorage} = require("node-localstorage");
 const app =express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+
 
 const port =process.env.Port || 3000;
 
 const static_path= path.join(__dirname,"../public/");
 const template_path= path.join(__dirname,"../templates/views");
 
+if (typeof localStorage === "undefined" || localStorage === null) {
+    const LocalStorage = require('node-localstorage').LocalStorage;
+    localStorage = new LocalStorage('./scratch');
+  }
+
 app.use(express.static(static_path));
 app.set("view engine","hbs");
 app.set("views",template_path);
 
 app.get("/",(req,res)=>{
-    res.render("login");
+    res.render("login",{success:""});
 })
 
 app.get("/register",(req,res)=>{
-    res.render("register");
+    res.render("register",{success:""});
 })
 app.get("/login",(req,res)=>{
     res.render("login");
@@ -46,13 +54,9 @@ app.post('/register',(req,res)=>{
                    })
 
                    const user = registeremplloyee.generateAuthToken();
-                //   console.log(token);
-
-                //  const registered =  registeremplloyee.save();
-                //  const coookie=res.cookie("token",token);
-                //  console.log(registered.token);
-                
-                  res.send(200).redirect("/");
+                  
+                   //console.log(localStorage);
+                  res.redirect("/");
                 //    console.log("successfully registered");
                 }catch(error){
                     res.send(400).send(error);
@@ -76,14 +80,17 @@ app.post('/',(req,res)=>{
                             res.redirect("index"); 
                         
                         }else{
-                            res.send("password is not match");
+                            res.render("login",{success:"Incorrect email or password"});
                         }
+                        
             
                 })
 
                  }catch(error){
+                     
                         res.send(error);
                     } 
+                    
         });   
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 

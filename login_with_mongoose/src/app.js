@@ -45,10 +45,9 @@ app.get("/register", (req, res) => {
 });
 app.get("/employee", (req, res) => {
     employee.find({}, function (err, docs) {
-        console.log(docs);
         const data = docs;
-        res.render('employee',{ "employee": docs });
-       
+        res.render('employee', { "employee": docs });
+
     });
 });
 app.get("/index", (req, res) => {
@@ -60,6 +59,7 @@ app.get("/addemployees", (req, res) => {
 app.get("/header-sidebar", (req, res) => {
     res.render("header-sidebar");
 });
+
 app.post('/register', (req, res) => {
     try {
         const adminpannel = new Register({
@@ -94,7 +94,7 @@ app.post('/', (req, res) => {
         res.send(error);
     }
 });
-app.post('/addemployees',(req, res, next) => {
+app.post('/addemployees', (req, res, next) => {
     try {
         const adminpannel = new employee({
             fname: req.body.fname,
@@ -109,13 +109,6 @@ app.post('/addemployees',(req, res, next) => {
             bankaccuntno: req.body.bankacc
         })
         const registered = adminpannel.save();
-        // employee.find({}, function (err, docs) {
-        //     console.log(docs);
-        //     const data = docs;
-        //     res.render('employee',{ "employee": docs });
-           
-        // });
-
         res.redirect("/employee");
 
     } catch (error) {
@@ -125,23 +118,63 @@ app.post('/addemployees',(req, res, next) => {
 
 app.post("/employee", (req, res) => {
     employee.find({}, function (err, docs) {
-        console.log(docs);
         const data = docs;
-        res.render('employee',{ "employee": docs });
-       
+        res.render('employee', { "employee": docs });
+
     });
 });
-app.get('/employee/:id', (req, res) =>{
-    res.render("/employee/:id'");
+app.get('/employee/updateemployee/:id', function (req, res) {
+    res.render('updateemployee', { employee: req.employeeId });
+});
+
+app.param('id', function (req, res, next, id) {
+    employee.findById(id, function (err, docs) {
+        if (err) res.json(err);
+        else {
+            req.employeeId = docs;
+            next();
+        }
+    });
+});
+app.get('/updateemployee/:id', function (req, res) {
+    res.render('employee', { employee: req.userId });
+});
+app.get("/profile/:id", (req, res) => {
+    console.log(req.employeeId);
+    res.render("profile",{ employee:req.employeeId});
+});
+app.post('/updateemployee/', function (req, res) {
+
+    employee.findByIdAndUpdate(req.body.id,
+        { fname: req.body.fname ,
+         lname: req.body.lname ,
+        email: req.body.email ,
+         father_name: req.body.fathername ,
+         home_contect: req.body.no ,
+        personal_contect: req.body.pno ,
+         address: req.body.address ,
+         team: req.body.team ,
+        designation: req.body.designation ,
+        bankaccuntno: req.body.bankacc }
+        , function (err, docs) {
+            if (err) res.json(err);
+            else {
+                res.redirect('/employee');
+            }
+        });
+});
+
+
+
+
+app.get('/delete/:id', (req, res) => {
+    employee.deleteOne({ _id: req.params.id }, function (err, obj) {
+        if (err) { throw err; }
+        console.log("1 document deleted");
+    });
+    res.redirect('/employee')
 })
-app.post('/employee/:id', (req, res) => {
-    employee.remove({_id: mongodb.ObjectID( req.params.id)}, (err, result) => {
-      if (err) return console.log(err)
-      console.log(req.body)
-      res.redirect('employee')
-    })
-  })
-  
+
 
 // LOGOUT
 app.get('/logout', (req, res, next) => {
